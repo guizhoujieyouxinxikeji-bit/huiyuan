@@ -1,0 +1,38 @@
+<nav-bar title="推荐有礼" back="{{true}}" />
+<view class="container">
+  <view class="hero-section">
+    <view class="hero-title">推荐好友 共享权益</view>
+    <view class="hero-desc text-muted">邀请好友注册，TA充值消费您都能获得积分奖励</view>
+  </view>
+
+  <view class="code-card card-highlight">
+    <view class="code-label">我的推荐码</view>
+    <view class="code-value">{{referralCode}}</view>
+    <view class="copy-btn" bind:tap="copyCode">📋 复制推荐码</view>
+  </view>
+
+  <button class="share-btn btn-primary btn-block" open-type="share">分享给好友</button>
+
+  <view class="action-row">
+    <view class="action-btn card" bind:tap="viewMyReferrals">
+      <text>👥 我的推荐</text>
+      <text class="text-muted text-sm">查看推荐列表 ›</text>
+    </view>
+  </view>
+
+  <view class="rules-card card">
+    <view class="rules-title">推荐规则</view>
+    <view wx:for="{{rules}}" wx:key="*this" class="rule-item">
+      <text class="rule-num">{{index + 1}}</text>
+      <text class="rule-text">{{item}}</text>
+    </view>
+  </view>
+
+  <view class="stats-card card">
+    <view class="stat-item"><view class="stat-num text-gold">{{stats.totalReferrals}}</view><view class="stat-label text-muted">推荐人数</view></view>
+    <view class="stat-divider"></view>
+    <view class="stat-item"><view class="stat-num text-gold">{{stats.totalRewardPoints}}</view><view class="stat-label text-muted">累计奖励</view></view>
+    <view class="stat-divider"></view>
+    <view class="stat-item"><view class="stat-num text-gold">{{stats.monthRewardPoints}}</view><view class="stat-label text-muted">本月奖励</view></view>
+  </view>
+</view>

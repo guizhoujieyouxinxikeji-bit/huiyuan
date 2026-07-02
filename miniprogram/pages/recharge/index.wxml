@@ -1,0 +1,44 @@
+<nav-bar title="储值充值" back="{{true}}" />
+<view class="container">
+  <view class="balance-card card-highlight">
+    <view class="balance-label">当前余额</view>
+    <view class="balance-value">¥{{balance}}</view>
+  </view>
+
+  <view class="section-title">选择充值套餐</view>
+  <view class="pkg-grid">
+    <view wx:for="{{packages}}" wx:key="id"
+          class="pkg-item {{selectedId === item.id ? 'selected' : ''}}"
+          bind:tap="selectPkg" data-id="{{item.id}}">
+      <view wx:if="{{item.tag}}" class="pkg-tag">{{item.tag}}</view>
+      <view class="pkg-amount">¥{{item.amount}}</view>
+      <view class="pkg-bonus">送{{item.bonus}}积分</view>
+    </view>
+  </view>
+
+  <view class="section-title">自定义金额</view>
+  <view class="custom-section card">
+    <view class="custom-input-row">
+      <text class="custom-prefix">¥</text>
+      <input class="custom-input" type="digit" placeholder="输入充值金额" value="{{customAmount}}" bindinput="onCustomInput" />
+    </view>
+    <view wx:if="{{customBonus > 0}}" class="custom-bonus">赠送 {{customBonus}} 积分</view>
+  </view>
+
+  <view class="agreement-row" bind:tap="toggleAgree">
+    <view class="checkbox {{agreeTerms ? 'checked' : ''}}">✓</view>
+    <text class="agreement-text">我已阅读并同意《储值协议》</text>
+  </view>
+
+  <button class="submit-btn btn-primary btn-block" bind:tap="submitRecharge" disabled="{{submitting}}">
+    立即充值 ¥{{getSubmitAmount() || '0'}}
+  </button>
+
+  <view class="rules-card card-flat">
+    <view class="rules-title">充值规则</view>
+    <view class="rules-text">· 充值金额实时到账，赠送积分自动发放</view>
+    <view class="rules-text">· 赠送积分有效期365天，过期自动清零</view>
+    <view class="rules-text">· 积分仅限本店消费使用，不可提现或转让</view>
+    <view class="rules-text">· 充值金额最低10元起</view>
+  </view>
+</view>

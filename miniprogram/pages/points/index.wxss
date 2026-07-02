@@ -1,0 +1,11 @@
+.tabs { display: flex; padding: 16rpx 24rpx; gap: 16rpx; position: sticky; top: 0; background: #0D0D0D; z-index: 10; }
+.tab-item { flex: 1; text-align: center; padding: 16rpx 0; font-size: 26rpx; color: #888; border-radius: 32rpx; background: #1A1A1A; }
+.tab-item.active { background: linear-gradient(135deg, rgba(212,168,67,0.2), rgba(184,145,46,0.1)); color: #D4A843; font-weight: 600; }
+.flow-item { display: flex; align-items: center; padding: 24rpx 28rpx; }
+.flow-icon { font-size: 36rpx; width: 60rpx; text-align: center; flex-shrink: 0; }
+.flow-info { flex: 1; margin-left: 12rpx; }
+.flow-desc { font-size: 28rpx; color: #ddd; }
+.flow-date { margin-top: 4rpx; }
+.flow-points { font-size: 32rpx; font-weight: 700; flex-shrink: 0; }
+.flow-points.positive { color: #2ECC71; }
+.flow-points.negative { color: #E74C3C; }

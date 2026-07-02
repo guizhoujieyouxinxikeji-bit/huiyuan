@@ -1,0 +1,21 @@
+<nav-bar title="会员码" />
+<view class="code-page">
+  <view class="code-card">
+    <view class="brand-row">
+      <text class="brand-name">尊享会员</text>
+      <text class="brand-level">{{levelName}}</text>
+    </view>
+    <view class="qr-wrapper">
+      <canvas type="2d" id="qrCanvas" class="qr-canvas" style="width:200px;height:200px;"></canvas>
+    </view>
+    <view class="code-number">{{memberCode}}</view>
+    <view class="code-hint">请出示给收银员扫码</view>
+  </view>
+  <view class="refresh-btn" bind:tap="refreshCode">🔄 刷新二维码</view>
+  <view class="tips-section">
+    <view class="tips-title">使用说明</view>
+    <view class="tips-item">· 结账时出示会员码，享受会员权益</view>
+    <view class="tips-item">· 积分自动累积，可在积分商城兑换好礼</view>
+    <view class="tips-item">· 二维码每5分钟自动刷新</view>
+  </view>
+</view>

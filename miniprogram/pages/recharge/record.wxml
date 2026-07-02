@@ -1,0 +1,22 @@
+<nav-bar title="充值记录" back="{{true}}" />
+<view class="container">
+  <view class="summary-row card">
+    <view class="summary-item"><text class="summary-val text-gold">¥{{totalAmount}}</text><text class="summary-label">累计充值</text></view>
+    <view class="summary-item"><text class="summary-val">{{totalCount}}</text><text class="summary-label">充值次数</text></view>
+  </view>
+
+  <block wx:if="{{records.length > 0}}">
+    <view wx:for="{{records}}" wx:key="id" class="record-item card">
+      <view class="record-top">
+        <text class="record-date text-muted text-sm">{{item.dateStr}}</text>
+        <text class="status-badge status-{{item.status}}">{{item.statusText}}</text>
+      </view>
+      <view class="record-bottom">
+        <view class="record-amount">¥{{item.amountStr}}</view>
+        <view wx:if="{{item.bonusPoints}}" class="record-bonus">+{{item.bonusPoints}}积分</view>
+      </view>
+    </view>
+  </block>
+  <empty-state wx:else text="暂无充值记录" icon="💰" />
+  <load-more status="{{loadStatus}}" />
+</view>

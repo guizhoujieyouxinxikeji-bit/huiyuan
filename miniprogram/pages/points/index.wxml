@@ -1,0 +1,22 @@
+<nav-bar title="积分明细" back="{{true}}" />
+<view class="container">
+  <points-card points="{{balance}}" label="可用积分" />
+  <view class="tabs">
+    <view wx:for="{{tabs}}" wx:key="key" class="tab-item {{activeTab === item.key ? 'active' : ''}}" bind:tap="switchTab" data-key="{{item.key}}">
+      <text>{{item.name}}</text>
+    </view>
+  </view>
+
+  <block wx:if="{{flows.length > 0}}">
+    <view wx:for="{{flows}}" wx:key="id" class="flow-item card">
+      <view class="flow-icon">{{item.icon}}</view>
+      <view class="flow-info">
+        <view class="flow-desc">{{item.desc}}</view>
+        <view class="flow-date text-muted text-xs">{{item.dateStr}}</view>
+      </view>
+      <view class="flow-points {{item.isPositive ? 'positive' : 'negative'}}">{{item.pointsStr}}</view>
+    </view>
+  </block>
+  <empty-state wx:else text="暂无积分记录" icon="⭐" />
+  <load-more status="{{loadStatus}}" />
+</view>

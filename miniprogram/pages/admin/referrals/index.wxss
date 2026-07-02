@@ -1,0 +1,12 @@
+.stats-row { display: flex; padding: 28rpx 0; }
+.stat-col { flex: 1; text-align: center; }
+.stat-num { display: block; font-size: 40rpx; font-weight: 700; font-family: 'DIN Alternate',sans-serif; }
+.stat-label { display: block; font-size: 22rpx; margin-top: 4rpx; }
+.ref-card { padding: 24rpx 28rpx; }
+.ref-people { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16rpx; }
+.person { flex: 1; }
+.person-label { margin-bottom: 4rpx; }
+.person-name { font-size: 28rpx; color: #ddd; }
+.person-phone { margin-top: 2rpx; }
+.ref-arrow { font-size: 36rpx; color: #D4A843; padding: 0 20rpx; }
+.ref-bottom { display: flex; justify-content: space-between; padding-top: 16rpx; border-top: 1rpx solid rgba(255,255,255,0.04); }

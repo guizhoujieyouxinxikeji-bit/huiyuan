@@ -1,0 +1,6 @@
+.nav-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 999; }
+.nav-content { display: flex; align-items: center; position: relative; padding: 0 24rpx; }
+.nav-back { font-size: 36rpx; padding: 0 20rpx; cursor: pointer; z-index: 1; }
+.nav-title { position: absolute; left: 0; right: 0; text-align: center; font-size: 34rpx; font-weight: 600; pointer-events: none; }
+.nav-right { margin-left: auto; z-index: 1; }
+.nav-border { height: 1rpx; background: linear-gradient(90deg, transparent, rgba(212,168,67,0.4), transparent); }

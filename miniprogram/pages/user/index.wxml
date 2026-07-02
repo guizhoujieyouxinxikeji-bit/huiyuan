@@ -1,0 +1,57 @@
+<nav-bar title="个人中心" />
+<view class="container">
+  <!-- Profile Header -->
+  <view class="profile-header">
+    <view class="avatar-ring">
+      <view class="avatar">{{memberInfo.nickname ? memberInfo.nickname[0] : '👤'}}</view>
+    </view>
+    <view class="profile-name">{{memberInfo.nickname || '未登录'}}</view>
+    <view class="level-tag {{levelInfo.key}}">{{levelInfo.emoji}} {{levelInfo.name}}</view>
+    <view class="profile-phone text-muted text-sm">{{memberInfo.phone || ''}}</view>
+  </view>
+
+  <!-- Stats -->
+  <view class="stats-row card">
+    <view class="stat-col">
+      <view class="stat-num">{{memberInfo.totalRecharge || 0}}</view>
+      <view class="stat-text">累计充值</view>
+    </view>
+    <view class="stat-col">
+      <view class="stat-num">{{memberInfo.pointsBalance || 0}}</view>
+      <view class="stat-text">当前积分</view>
+    </view>
+    <view class="stat-col">
+      <view class="stat-num">{{memberInfo.referralCount || 0}}</view>
+      <view class="stat-text">推荐人数</view>
+    </view>
+  </view>
+
+  <!-- Admin Entry -->
+  <view wx:if="{{isAdmin}}" class="admin-entry card" bind:tap="goAdmin">
+    <view class="flex items-center">
+      <text class="admin-icon">⚙️</text>
+      <text class="admin-text">管理后台</text>
+    </view>
+    <text class="admin-arrow">›</text>
+  </view>
+
+  <!-- Menu Groups -->
+  <view wx:for="{{menuGroups}}" wx:key="title" class="menu-group">
+    <view class="menu-group-title">{{item.title}}</view>
+    <view class="menu-card card">
+      <view wx:for="{{item.items}}" wx:for-item="menu" wx:key="name"
+            class="menu-item" bind:tap="navigateTo"
+            data-url="{{menu.url}}" data-action="{{menu.action}}">
+        <view class="menu-left">
+          <text class="menu-icon">{{menu.icon}}</text>
+          <text class="menu-name">{{menu.name}}</text>
+        </view>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Logout -->
+  <view class="logout-btn btn-outline btn-block" bind:tap="handleLogout">退出登录</view>
+  <view class="spacer-lg"></view>
+</view>

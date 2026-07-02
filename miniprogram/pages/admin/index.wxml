@@ -1,0 +1,40 @@
+<nav-bar title="管理后台" back="{{true}}" />
+<view class="container">
+  <view class="section-title">今日概览</view>
+  <view class="stat-grid">
+    <view class="stat-card card">
+      <view class="stat-num">{{dashboard.today.newMembers || 0}}</view>
+      <view class="stat-label">新增会员</view>
+    </view>
+    <view class="stat-card card">
+      <view class="stat-num">¥{{dashboard.today.rechargeAmount || 0}}</view>
+      <view class="stat-label">充值金额</view>
+    </view>
+    <view class="stat-card card">
+      <view class="stat-num">¥{{dashboard.today.consumeAmount || 0}}</view>
+      <view class="stat-label">消费金额</view>
+    </view>
+    <view class="stat-card card">
+      <view class="stat-num">{{dashboard.today.pointsIssued || 0}}</view>
+      <view class="stat-label">发放积分</view>
+    </view>
+  </view>
+
+  <view class="section-title">累计数据</view>
+  <view class="cumulative-row card">
+    <view class="cum-item"><text class="cum-val">{{dashboard.total.members || 0}}</text><text class="cum-label text-muted">总会员</text></view>
+    <view class="cum-item"><text class="cum-val">{{dashboard.total.rechargeAmount || 0}}</text><text class="cum-label text-muted">总充值</text></view>
+    <view class="cum-item"><text class="cum-val">{{dashboard.total.consumeAmount || 0}}</text><text class="cum-label text-muted">总消费</text></view>
+    <view class="cum-item"><text class="cum-val">{{dashboard.total.pointsIssued || 0}}</text><text class="cum-label text-muted">总积分</text></view>
+  </view>
+
+  <view class="section-title">功能模块</view>
+  <view class="menu-grid">
+    <view wx:for="{{menuItems}}" wx:key="name" class="menu-item" bind:tap="navigateTo" data-url="{{item.url}}">
+      <text class="menu-icon">{{item.icon}}</text>
+      <text class="menu-name">{{item.name}}</text>
+    </view>
+  </view>
+
+  <button class="export-btn btn-outline btn-block" style="margin:32rpx 24rpx;" bind:tap="exportData">导出数据</button>
+</view>

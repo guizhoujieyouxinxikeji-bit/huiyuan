@@ -1,0 +1,10 @@
+<view class="nav-bar" style="background:{{bgColor}};">
+  <view class="status-bar" style="height:{{statusBarHeight}}px;"></view>
+  <view class="nav-content" style="height:{{navBarHeight}}px;">
+    <view wx:if="{{back}}" class="nav-back" bind:tap="goBack" style="color:{{color}};">◁</view>
+    <view class="nav-title" style="color:{{color}};">{{title}}</view>
+    <view class="nav-right"><slot name="right"></slot></view>
+  </view>
+  <view class="nav-border"></view>
+</view>
+<view style="height:{{statusBarHeight + navBarHeight + 1}}px;"></view>

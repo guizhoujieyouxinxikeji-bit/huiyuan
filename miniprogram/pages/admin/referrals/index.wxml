@@ -1,0 +1,24 @@
+<nav-bar title="推荐关系" back="{{true}}" />
+<view class="container">
+  <view class="stats-row card">
+    <view class="stat-col"><text class="stat-num">{{totalPairs}}</text><text class="stat-label text-muted">推荐对数</text></view>
+    <view class="stat-col"><text class="stat-num text-gold">{{monthNew}}</text><text class="stat-label text-muted">本月新增</text></view>
+  </view>
+
+  <block wx:if="{{list.length > 0}}">
+    <view wx:for="{{list}}" wx:key="id" class="ref-card card">
+      <view class="ref-people">
+        <view class="person"><view class="person-label text-muted text-xs">推荐人</view><view class="person-name">{{item.referrer.nickname}}</view><view class="person-phone text-muted text-xs">{{item.referrerPhone}}</view></view>
+        <view class="ref-arrow">→</view>
+        <view class="person"><view class="person-label text-muted text-xs">被推荐人</view><view class="person-name">{{item.referred.nickname}}</view><view class="person-phone text-muted text-xs">{{item.referredPhone}}</view></view>
+      </view>
+      <view class="ref-bottom">
+        <text class="text-muted text-xs">{{item.dateStr}} 绑定</text>
+        <text class="text-muted text-xs">充值 ¥{{item.referredTotalRecharge || 0}}</text>
+        <text class="text-gold text-sm">奖励 {{item.totalRewardPoints || 0}} 积分</text>
+      </view>
+    </view>
+  </block>
+  <empty-state wx:else text="暂无推荐关系" icon="🔗" />
+  <load-more status="{{loadStatus}}" />
+</view>

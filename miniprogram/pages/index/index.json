@@ -1,0 +1,8 @@
+{
+  "navigationStyle": "custom",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "nav-bar": "/miniprogram/components/nav-bar/nav-bar",
+    "points-card": "/miniprogram/components/points-card/points-card"
+  }
+}

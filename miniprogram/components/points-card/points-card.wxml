@@ -1,0 +1,5 @@
+<view class="points-card">
+  <view class="points-label">{{label}}</view>
+  <view class="points-value">{{formattedPoints}}</view>
+  <view wx:if="{{showTrend && trendText}}" class="points-trend" style="color:{{trendColor}};">{{trendText}}</view>
+</view>

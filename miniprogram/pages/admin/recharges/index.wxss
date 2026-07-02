@@ -1,0 +1,17 @@
+.filter-tabs { display: flex; gap: 12rpx; padding: 16rpx 24rpx; }
+.filter-tab { padding: 12rpx 24rpx; border-radius: 28rpx; font-size: 24rpx; color: #888; background: #1A1A1A; }
+.filter-tab.active { background: linear-gradient(135deg, rgba(212,168,67,0.2), rgba(184,145,46,0.1)); color: #D4A843; font-weight: 600; }
+.summary-bar { display: flex; justify-content: space-between; align-items: center; padding: 16rpx 24rpx; }
+.export-link { padding: 8rpx 0; }
+.record-card { padding: 20rpx 28rpx; }
+.record-row1 { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8rpx; }
+.record-name { font-size: 26rpx; color: #ddd; }
+.status-badge { font-size: 20rpx; padding: 4rpx 14rpx; border-radius: 14rpx; }
+.status-success { background: rgba(46,204,113,0.15); color: #2ECC71; }
+.status-pending { background: rgba(212,168,67,0.15); color: #D4A843; }
+.status-refunded { background: rgba(231,76,60,0.15); color: #E74C3C; }
+.status-failed { background: rgba(128,128,128,0.15); color: #888; }
+.record-row2 { display: flex; align-items: baseline; gap: 16rpx; margin-bottom: 8rpx; }
+.record-amount { font-size: 36rpx; font-weight: 700; color: #D4AF37; }
+.record-bonus { font-size: 24rpx; color: #2ECC71; background: rgba(46,204,113,0.1); padding: 2rpx 12rpx; border-radius: 8rpx; }
+.record-row3 { font-size: 22rpx; }

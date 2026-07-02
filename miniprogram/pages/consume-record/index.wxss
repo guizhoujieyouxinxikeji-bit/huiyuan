@@ -1,0 +1,13 @@
+.month-card { display: flex; justify-content: space-between; align-items: center; padding: 28rpx 32rpx; }
+.month-label { font-size: 28rpx; color: #B0B0B0; }
+.month-value { font-size: 44rpx; font-weight: 700; color: #D4AF37; }
+.consume-item { padding: 24rpx 28rpx; }
+.consume-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8rpx; }
+.consume-date { font-size: 24rpx; }
+.consume-amount { font-size: 36rpx; font-weight: 700; color: #D4AF37; }
+.consume-mid { display: flex; gap: 16rpx; align-items: center; margin-bottom: 8rpx; }
+.points-deduct { font-size: 22rpx; color: #E74C3C; background: rgba(231,76,60,0.1); padding: 2rpx 12rpx; border-radius: 8rpx; }
+.actual-pay { font-size: 22rpx; }
+.consume-bottom { display: flex; justify-content: space-between; align-items: center; }
+.consume-items { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.referrer-info { flex-shrink: 0; margin-left: 12rpx; }

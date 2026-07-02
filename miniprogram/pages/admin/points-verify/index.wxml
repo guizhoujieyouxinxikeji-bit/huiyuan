@@ -1,0 +1,47 @@
+<nav-bar title="积分核销" back="{{true}}" />
+<view class="container">
+  <button class="new-btn btn-primary btn-block" style="margin:24rpx;" bind:tap="showForm">+ 新建核销</button>
+  <view class="today-bar card-flat text-center" style="margin:0 24rpx;padding:16rpx;">
+    <text class="text-muted text-sm">今日核销 {{todayCount}} 次</text>
+  </view>
+
+  <!-- Verify Form -->
+  <view wx:if="{{showForm}}" class="form-overlay" catchtap="hideForm">
+    <view class="form-card" catchtap="">
+      <view class="form-title">积分核销</view>
+      <view class="form-group">
+        <text class="form-label">会员手机号</text>
+        <view class="phone-row">
+          <input class="form-input flex-1" placeholder="输入手机号" value="{{form.memberPhone}}" bindinput="onInput" data-field="memberPhone" />
+          <view class="scan-btn" bind:tap="scanCode">📷 扫码</view>
+        </view>
+      </view>
+      <view class="form-group">
+        <text class="form-label">核销积分数</text>
+        <input class="form-input" type="number" placeholder="输入积分数" value="{{form.points}}" bindinput="onInput" data-field="points" />
+      </view>
+      <view class="form-group">
+        <text class="form-label">消费商品</text>
+        <input class="form-input" placeholder="如：招牌鱼头、精酿啤酒" value="{{form.items}}" bindinput="onInput" data-field="items" />
+      </view>
+      <view class="form-group">
+        <text class="form-label">备注</text>
+        <input class="form-input" placeholder="可选" value="{{form.remark}}" bindinput="onInput" data-field="remark" />
+      </view>
+      <view class="form-btns">
+        <button class="btn-outline" style="flex:1;" bind:tap="hideForm">取消</button>
+        <button class="btn-primary" style="flex:1;" bind:tap="submitVerify">确认核销</button>
+      </view>
+    </view>
+  </view>
+
+  <block wx:if="{{verifications.length > 0}}">
+    <view wx:for="{{verifications}}" wx:key="id" class="verify-card card">
+      <view class="v-row1"><text class="v-name">{{item.memberName}} <text class="text-muted text-xs">{{item.memberPhone}}</text></text><text class="v-points">-{{item.points}}积分</text></view>
+      <view wx:if="{{item.items}}" class="v-items text-muted text-xs">{{item.items}}</view>
+      <view class="v-row2 text-muted text-xs">{{item.dateStr}} · 操作人: {{item.operatorName || '-'}}</view>
+    </view>
+  </block>
+  <empty-state wx:else text="暂无核销记录" icon="✅" />
+  <load-more status="{{loadStatus}}" />
+</view>

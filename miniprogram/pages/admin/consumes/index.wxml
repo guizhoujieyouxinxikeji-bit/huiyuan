@@ -1,0 +1,34 @@
+<nav-bar title="消费记录" back="{{true}}" />
+<view class="container">
+  <view class="date-filter card">
+    <picker mode="date" value="{{startDate}}" bindchange="onDateChange" data-field="startDate">
+      <view class="date-pick">{{startDate || '开始日期'}}</view>
+    </picker>
+    <text class="date-sep">至</text>
+    <picker mode="date" value="{{endDate}}" bindchange="onDateChange" data-field="endDate">
+      <view class="date-pick">{{endDate || '结束日期'}}</view>
+    </picker>
+  </view>
+
+  <view class="summary-bar card">
+    <view class="flex items-center" style="gap:24rpx;">
+      <text class="text-muted text-sm">今日 ¥{{todayTotal}}</text>
+      <text class="text-muted text-sm">本月 ¥{{monthTotal}}</text>
+    </view>
+    <view class="text-gold text-sm" bind:tap="exportData">导出 ↓</view>
+  </view>
+
+  <block wx:if="{{records.length > 0}}">
+    <view wx:for="{{records}}" wx:key="id" class="consume-card card">
+      <view class="row1"><text class="name">{{item.memberName}} <text class="text-muted text-xs">{{item.memberPhone}}</text></text><text class="amount text-gold">¥{{item.amountStr}}</text></view>
+      <view class="row2">
+        <text wx:if="{{item.pointsStr}}" class="points-info">{{item.pointsStr}}</text>
+        <text class="text-muted text-xs">实付 ¥{{item.actualStr}}</text>
+      </view>
+      <view wx:if="{{item.items}}" class="row3 text-muted text-xs">{{item.items}}</view>
+      <view class="row4 text-muted text-xs">{{item.dateStr}} · {{item.id}}</view>
+    </view>
+  </block>
+  <empty-state wx:else text="暂无消费记录" icon="🧾" />
+  <load-more status="{{loadStatus}}" />
+</view>

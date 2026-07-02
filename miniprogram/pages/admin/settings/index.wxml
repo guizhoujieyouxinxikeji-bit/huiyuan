@@ -1,0 +1,52 @@
+<nav-bar title="系统设置" back="{{true}}" />
+<view class="container">
+  <!-- 积分规则 -->
+  <view class="section-title">积分规则</view>
+  <view class="settings-card card">
+    <view class="setting-row">
+      <text class="setting-label">充值赠送比例</text>
+      <view class="setting-input-wrap"><input class="setting-input" type="digit" value="{{settings.rechargeBonusRate}}" bindinput="onInput" data-field="rechargeBonusRate" /><text class="setting-suffix">%</text></view>
+    </view>
+    <view class="setting-row">
+      <text class="setting-label">推荐充值奖励比例</text>
+      <view class="setting-input-wrap"><input class="setting-input" type="digit" value="{{settings.referralRechargeRewardRate}}" bindinput="onInput" data-field="referralRechargeRewardRate" /><text class="setting-suffix">%</text></view>
+    </view>
+    <view class="setting-row">
+      <text class="setting-label">推荐消费奖励比例</text>
+      <view class="setting-input-wrap"><input class="setting-input" type="digit" value="{{settings.referralConsumeRewardRate}}" bindinput="onInput" data-field="referralConsumeRewardRate" /><text class="setting-suffix">%</text></view>
+    </view>
+    <view class="setting-row">
+      <text class="setting-label">积分抵扣比率</text>
+      <view class="setting-input-wrap"><text class="setting-prefix">1积分 =</text><input class="setting-input" type="digit" value="{{settings.pointsDeductRate}}" bindinput="onInput" data-field="pointsDeductRate" /><text class="setting-suffix">元</text></view>
+    </view>
+  </view>
+
+  <!-- 风控设置 -->
+  <view class="section-title">风控设置</view>
+  <view class="settings-card card">
+    <view class="setting-row">
+      <text class="setting-label">每月推荐奖励上限</text>
+      <view class="setting-input-wrap"><input class="setting-input" type="number" value="{{settings.maxReferralRewardPerMonth}}" bindinput="onInput" data-field="maxReferralRewardPerMonth" /><text class="setting-suffix">积分</text></view>
+    </view>
+    <view class="setting-row">
+      <text class="setting-label">积分有效期</text>
+      <view class="setting-input-wrap"><input class="setting-input" type="number" value="{{settings.pointsValidityDays}}" bindinput="onInput" data-field="pointsValidityDays" /><text class="setting-suffix">天</text></view>
+    </view>
+    <view class="setting-row">
+      <text class="setting-label">退款扣回积分</text>
+      <switch checked="{{settings.refundDeductPoints}}" bindchange="onSwitch" data-field="refundDeductPoints" color="#D4A843" />
+    </view>
+  </view>
+
+  <!-- 商品设置 -->
+  <view class="section-title">商品设置</view>
+  <view class="settings-card card">
+    <view class="setting-row" style="flex-direction:column;align-items:flex-start;">
+      <text class="setting-label" style="margin-bottom:12rpx;">不参与积分的商品（逗号分隔）</text>
+      <textarea class="setting-textarea" placeholder="如：特价菜A, 套餐B" value="{{settings.excludedItems}}" bindinput="onInput" data-field="excludedItems" />
+    </view>
+  </view>
+
+  <button class="save-btn btn-primary btn-block" style="margin:32rpx 24rpx;" bind:tap="saveSettings" disabled="{{saving}}">保存设置</button>
+  <button class="reset-btn btn-outline btn-block" style="margin:0 24rpx 48rpx;" bind:tap="resetDefault">恢复默认</button>
+</view>

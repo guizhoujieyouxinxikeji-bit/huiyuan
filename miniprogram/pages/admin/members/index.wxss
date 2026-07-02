@@ -1,0 +1,19 @@
+.search-bar { display: flex; align-items: center; padding: 16rpx 20rpx; }
+.search-input { flex: 1; background: #1A1A1A; border-radius: 12rpx; padding: 16rpx 20rpx; font-size: 26rpx; color: #fff; border: 1rpx solid rgba(212,168,67,0.15); }
+.search-btn { padding: 12rpx 16rpx; font-size: 32rpx; }
+.member-item { display: flex; justify-content: space-between; align-items: center; padding: 24rpx 28rpx; }
+.member-left { display: flex; align-items: center; }
+.member-avatar { width: 64rpx; height: 64rpx; border-radius: 50%; background: #2A2A2A; display: flex; align-items: center; justify-content: center; font-size: 24rpx; color: #D4A843; margin-right: 20rpx; border: 2rpx solid rgba(212,168,67,0.15); }
+.member-name { font-size: 28rpx; color: #ddd; }
+.level-tag { font-size: 18rpx; padding: 2rpx 12rpx; border-radius: 12rpx; background: rgba(212,168,67,0.1); color: #D4A843; }
+.member-phone { margin-top: 4rpx; }
+.member-stats { text-align: right; }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; display: flex; align-items: flex-end; }
+.modal-content { width: 100%; background: #1A1A1A; border-radius: 24rpx 24rpx 0 0; max-height: 80vh; overflow-y: auto; animation: slideUp 0.3s ease-out; }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.modal-header { display: flex; justify-content: space-between; align-items: center; padding: 32rpx; border-bottom: 1rpx solid rgba(255,255,255,0.06); }
+.modal-title { font-size: 32rpx; font-weight: 600; color: #D4A843; }
+.modal-close { font-size: 32rpx; color: #888; padding: 8rpx; }
+.detail-body { padding: 16rpx 32rpx 48rpx; }
+.detail-row { display: flex; justify-content: space-between; padding: 20rpx 0; border-bottom: 1rpx solid rgba(255,255,255,0.04); font-size: 26rpx; color: #ddd; }
+.detail-label { color: #888; }

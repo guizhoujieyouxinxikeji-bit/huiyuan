@@ -1,0 +1,17 @@
+.balance-banner { display: flex; justify-content: space-between; align-items: center; padding: 28rpx 32rpx; }
+.banner-label { font-size: 28rpx; color: #B0B0B0; }
+.banner-value { font-size: 44rpx; font-weight: 700; color: #D4AF37; }
+.cat-tabs { display: flex; gap: 16rpx; padding: 16rpx 24rpx; overflow-x: auto; }
+.cat-tab { padding: 12rpx 28rpx; border-radius: 28rpx; font-size: 24rpx; color: #888; background: #1A1A1A; white-space: nowrap; }
+.cat-tab.active { background: rgba(212,168,67,0.15); color: #D4A843; font-weight: 600; }
+.items-grid { display: flex; flex-wrap: wrap; padding: 8rpx 16rpx; }
+.mall-item { width: calc(50% - 16rpx); margin: 8rpx; background: #242424; border-radius: 16rpx; overflow: hidden; }
+.item-img { height: 200rpx; display: flex; align-items: center; justify-content: center; }
+.item-emoji { font-size: 60rpx; }
+.item-info { padding: 16rpx 20rpx; }
+.item-name { font-size: 26rpx; color: #ddd; margin-bottom: 8rpx; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item-cost { font-size: 24rpx; font-weight: 600; margin-bottom: 12rpx; }
+.redeem-btn { background: linear-gradient(135deg, #D4A843, #B8912E); color: #000; font-size: 22rpx; border: none; border-radius: 24rpx; padding: 10rpx 0; font-weight: 600; }
+.redeem-btn::after { border: none; }
+.redeem-btn.disabled { background: #444; color: #888; }
+.rules-footer { text-align: center; padding: 32rpx 24rpx; }

@@ -1,0 +1,26 @@
+<nav-bar title="消费记录" back="{{true}}" />
+<view class="container">
+  <view class="month-card card-highlight">
+    <text class="month-label">本月消费</text>
+    <text class="month-value">¥{{monthTotal}}</text>
+  </view>
+
+  <block wx:if="{{records.length > 0}}">
+    <view wx:for="{{records}}" wx:key="id" class="consume-item card">
+      <view class="consume-top">
+        <text class="consume-date text-muted text-sm">{{item.dateStr}}</text>
+        <text class="consume-amount">¥{{item.amountStr}}</text>
+      </view>
+      <view class="consume-mid">
+        <text wx:if="{{item.pointsStr}}" class="points-deduct">{{item.pointsStr}}</text>
+        <text wx:if="{{item.pointsStr}}" class="actual-pay text-muted text-xs">实付 ¥{{item.actualStr}}</text>
+      </view>
+      <view class="consume-bottom">
+        <text wx:if="{{item.items}}" class="consume-items text-muted text-xs">{{item.items}}</text>
+        <text wx:if="{{item.referrerStr}}" class="referrer-info text-xs" style="color:#2ECC71;">{{item.referrerStr}}</text>
+      </view>
+    </view>
+  </block>
+  <empty-state wx:else text="暂无消费记录" icon="🧾" />
+  <load-more status="{{loadStatus}}" />
+</view>

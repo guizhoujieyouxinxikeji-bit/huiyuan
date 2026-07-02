@@ -1,0 +1,9 @@
+<view wx:if="{{status === 'loading'}}" class="load-more">
+  <view class="spinner"></view>
+  <text class="load-text">加载中...</text>
+</view>
+<view wx:elif="{{status === 'nomore'}}" class="load-more nomore">
+  <view class="line"></view>
+  <text class="load-text">没有更多了</text>
+  <view class="line"></view>
+</view>

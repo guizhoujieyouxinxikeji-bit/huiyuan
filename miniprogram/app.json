@@ -1,0 +1,57 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/member-code/index",
+    "pages/user/index",
+    "pages/recharge/index",
+    "pages/recharge/record",
+    "pages/points/index",
+    "pages/points/mall",
+    "pages/recommend/index",
+    "pages/recommend/list",
+    "pages/consume-record/index",
+    "pages/admin/index",
+    "pages/admin/members/index",
+    "pages/admin/referrals/index",
+    "pages/admin/recharges/index",
+    "pages/admin/consumes/index",
+    "pages/admin/points-flow/index",
+    "pages/admin/points-verify/index",
+    "pages/admin/settings/index"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#1A1A1A",
+    "navigationBarTitleText": "尊享会员",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#0D0D0D",
+    "backgroundTextStyle": "light"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#D4A843",
+    "backgroundColor": "#1A1A1A",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/tab-home.png",
+        "selectedIconPath": "images/tab-home-active.png"
+      },
+      {
+        "pagePath": "pages/member-code/index",
+        "text": "会员码",
+        "iconPath": "images/tab-qrcode.png",
+        "selectedIconPath": "images/tab-qrcode-active.png"
+      },
+      {
+        "pagePath": "pages/user/index",
+        "text": "我的",
+        "iconPath": "images/tab-user.png",
+        "selectedIconPath": "images/tab-user-active.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}

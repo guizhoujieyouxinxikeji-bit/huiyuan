@@ -1,0 +1,28 @@
+<nav-bar title="积分商城" back="{{true}}" />
+<view class="container">
+  <view class="balance-banner card-highlight">
+    <text class="banner-label">可用积分</text>
+    <text class="banner-value">{{balance}}</text>
+  </view>
+
+  <view class="cat-tabs">
+    <view wx:for="{{categories}}" wx:key="key" class="cat-tab {{activeCategory === item.key ? 'active' : ''}}" bind:tap="filterCategory" data-key="{{item.key}}">{{item.name}}</view>
+  </view>
+
+  <view class="items-grid">
+    <view wx:for="{{items}}" wx:key="id" class="mall-item" wx:if="{{activeCategory === 'all' || item.category === activeCategory}}">
+      <view class="item-img" style="background:{{item.gradients[item.category] || item.gradients.food}};">
+        <text class="item-emoji">{{item.category === 'drink' ? '🍺' : item.category === 'special' ? '🎁' : '🍽️'}}</text>
+      </view>
+      <view class="item-info">
+        <view class="item-name">{{item.name}}</view>
+        <view class="item-cost text-gold">{{item.pointsCost}} 积分</view>
+        <button class="redeem-btn {{balance >= item.pointsCost ? '' : 'disabled'}}" bind:tap="redeemItem" data-item="{{item}}">兑换</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="rules-footer text-muted text-xs">
+    积分仅限本店消费使用，不可提现、不转账、不兑换现金
+  </view>
+</view>

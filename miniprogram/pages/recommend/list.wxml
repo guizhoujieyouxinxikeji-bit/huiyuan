@@ -1,0 +1,25 @@
+<nav-bar title="我的推荐" back="{{true}}" />
+<view class="container">
+  <view class="stats-row card">
+    <view class="stat-col"><text class="stat-num">{{total}}</text><text class="stat-label text-muted">推荐人数</text></view>
+    <view class="stat-col"><text class="stat-num text-gold">{{totalReward}}</text><text class="stat-label text-muted">奖励积分</text></view>
+  </view>
+
+  <block wx:if="{{list.length > 0}}">
+    <view wx:for="{{list}}" wx:key="id" class="ref-item card">
+      <view class="ref-left">
+        <view class="ref-avatar">{{item.nickname ? item.nickname[0] : '?'}}</view>
+        <view class="ref-info">
+          <view class="ref-name">{{item.nickname}}</view>
+          <view class="ref-phone text-muted text-xs">{{item.phoneMasked}} · {{item.dateStr}}加入</view>
+        </view>
+      </view>
+      <view class="ref-right">
+        <view class="ref-reward text-gold">+{{item.rewardStr}}</view>
+        <view class="ref-reward-label text-muted text-xs">奖励积分</view>
+      </view>
+    </view>
+  </block>
+  <empty-state wx:else text="还没有推荐好友" icon="👥" />
+  <load-more status="{{loadStatus}}" />
+</view>

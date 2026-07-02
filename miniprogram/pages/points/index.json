@@ -1,0 +1,1 @@
+{ "navigationStyle": "custom", "usingComponents": { "nav-bar": "/miniprogram/components/nav-bar/nav-bar", "points-card": "/miniprogram/components/points-card/points-card", "load-more": "/miniprogram/components/load-more/load-more", "empty-state": "/miniprogram/components/empty-state/empty-state" } }

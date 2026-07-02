@@ -1,0 +1,26 @@
+<nav-bar title="充值记录" back="{{true}}" />
+<view class="container">
+  <view class="filter-tabs">
+    <view wx:for="{{filters}}" wx:key="key" class="filter-tab {{activeFilter === item.key ? 'active' : ''}}" bind:tap="switchFilter" data-key="{{item.key}}">{{item.name}}</view>
+  </view>
+  <view class="summary-bar card">
+    <view class="summary-left"><text class="text-muted text-sm">共{{totalCount}}笔 · ¥{{totalAmount}}</text></view>
+    <view class="export-link text-gold text-sm" bind:tap="exportData">导出 ↓</view>
+  </view>
+
+  <block wx:if="{{records.length > 0}}">
+    <view wx:for="{{records}}" wx:key="id" class="record-card card">
+      <view class="record-row1">
+        <text class="record-name">{{item.memberName}} <text class="text-muted text-xs">{{item.memberPhone}}</text></text>
+        <text class="status-badge status-{{item.status}}">{{item.statusText}}</text>
+      </view>
+      <view class="record-row2">
+        <text class="record-amount">¥{{item.amountStr}}</text>
+        <text wx:if="{{item.bonusPoints}}" class="record-bonus">+{{item.bonusPoints}}积分</text>
+      </view>
+      <view class="record-row3 text-muted text-xs">{{item.dateStr}} · {{item.id}}</view>
+    </view>
+  </block>
+  <empty-state wx:else text="暂无充值记录" icon="💰" />
+  <load-more status="{{loadStatus}}" />
+</view>

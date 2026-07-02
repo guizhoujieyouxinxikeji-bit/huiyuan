@@ -1,0 +1,20 @@
+.hero-section { text-align: center; padding: 40rpx 24rpx 24rpx; }
+.hero-title { font-size: 40rpx; font-weight: 700; color: #D4A843; }
+.hero-desc { font-size: 26rpx; margin-top: 8rpx; }
+.code-card { text-align: center; }
+.code-label { font-size: 24rpx; color: #B0B0B0; margin-bottom: 12rpx; }
+.code-value { font-size: 52rpx; font-weight: 700; color: #D4AF37; letter-spacing: 8rpx; margin-bottom: 20rpx; font-family: 'DIN Alternate',monospace; }
+.copy-btn { display: inline-block; padding: 12rpx 32rpx; border: 1rpx dashed rgba(212,168,67,0.5); border-radius: 24rpx; color: #D4A843; font-size: 26rpx; }
+.share-btn { margin: 24rpx; }
+.action-row { padding: 0 24rpx; }
+.action-btn { display: flex; justify-content: space-between; align-items: center; font-size: 28rpx; color: #ddd; }
+.rules-card { margin-top: 24rpx; }
+.rules-title { font-size: 30rpx; font-weight: 600; color: #D4A843; margin-bottom: 20rpx; }
+.rule-item { display: flex; align-items: flex-start; margin-bottom: 16rpx; }
+.rule-num { width: 40rpx; height: 40rpx; border-radius: 50%; background: rgba(212,168,67,0.15); color: #D4A843; font-size: 22rpx; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 16rpx; margin-top: 2rpx; }
+.rule-text { font-size: 24rpx; color: #B0B0B0; line-height: 1.8; }
+.stats-card { display: flex; margin-top: 24rpx; }
+.stats-card .stat-item { flex: 1; text-align: center; }
+.stats-card .stat-num { font-size: 36rpx; font-weight: 700; font-family: 'DIN Alternate',sans-serif; }
+.stats-card .stat-label { font-size: 22rpx; margin-top: 4rpx; }
+.stats-card .stat-divider { width: 1rpx; background: rgba(255,255,255,0.06); }

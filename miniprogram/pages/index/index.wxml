@@ -1,0 +1,55 @@
+<nav-bar title="尊享会员" />
+<view class="container">
+  <!-- Hero Card -->
+  <view class="hero-card">
+    <view class="hero-bg"></view>
+    <view class="hero-content">
+      <view class="level-row">
+        <view class="level-badge {{levelInfo.key}}">{{levelInfo.emoji}} {{levelInfo.name}}</view>
+      </view>
+      <view class="member-name">{{memberInfo.nickname || '尊贵会员'}}</view>
+      <view class="member-phone text-muted text-sm">{{memberInfo.phone || ''}}</view>
+      <view class="hero-stats">
+        <view class="stat-item">
+          <view class="stat-value">{{memberInfo.pointsBalance || 0}}</view>
+          <view class="stat-label">可用积分</view>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item">
+          <view class="stat-value">¥{{memberInfo.balance || '0.00'}}</view>
+          <view class="stat-label">账户余额</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Quick Actions -->
+  <view class="section-title">快捷操作</view>
+  <view class="action-grid">
+    <view wx:for="{{quickActions}}" wx:key="name" class="action-item" bind:tap="navigateTo" data-url="{{item.url}}">
+      <view class="action-icon">{{item.icon}}</view>
+      <view class="action-name">{{item.name}}</view>
+    </view>
+  </view>
+
+  <!-- Recent Activities -->
+  <view class="section-title">最近动态</view>
+  <view class="card activity-card" wx:if="{{recentActivities.length > 0}}">
+    <view wx:for="{{recentActivities}}" wx:key="id" class="activity-item">
+      <view class="activity-dot"></view>
+      <view class="activity-content">
+        <view class="activity-desc">{{item.description}}</view>
+        <view class="activity-time text-muted text-xs">{{item.createdAt}}</view>
+      </view>
+      <view class="activity-points {{item.points > 0 ? 'positive' : 'negative'}}">
+        {{item.points > 0 ? '+' : ''}}{{item.points}}
+      </view>
+    </view>
+  </view>
+  <view wx:else class="empty-state">
+    <view class="empty-icon">📋</view>
+    <view class="empty-text text-muted">暂无动态</view>
+  </view>
+
+  <view class="spacer-lg"></view>
+</view>

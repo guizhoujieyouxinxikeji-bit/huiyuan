@@ -1,0 +1,10 @@
+.points-card {
+  background: linear-gradient(145deg, #242424, #1A1A1A);
+  border: 1rpx solid rgba(201,169,110,0.3);
+  border-radius: 20rpx;
+  padding: 32rpx;
+  text-align: center;
+}
+.points-label { font-size: 24rpx; color: #B0B0B0; margin-bottom: 12rpx; }
+.points-value { font-size: 64rpx; font-weight: 700; color: #D4AF37; font-family: 'DIN Alternate','Avenir',sans-serif; text-shadow: 0 2rpx 8rpx rgba(212,175,55,0.3); }
+.points-trend { font-size: 24rpx; margin-top: 8rpx; }
