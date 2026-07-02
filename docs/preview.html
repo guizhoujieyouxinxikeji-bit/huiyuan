@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>尊享会员 · 小程序预览</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--gold:#D4A843;--gold-light:#E8C97A;--gold-dark:#B8912E;--black:#0D0D0D;--black-light:#1A1A1A;--black-card:#242424;--text:#fff;--text2:#B0B0B0;--text3:#666;--green:#2ECC71;--red:#E74C3C;--blue:#3498DB}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:#111;color:#ccc;display:flex;flex-direction:column;align-items:center;min-height:100vh;overflow-x:hidden}
+
+/* Header */
+.header{text-align:center;padding:32px 20px 16px;width:100%}
+.header h1{font-size:28px;background:linear-gradient(135deg,var(--gold),var(--gold-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700}
+.header p{color:var(--text3);font-size:13px;margin-top:6px}
+
+/* Page tabs */
+.page-tabs{display:flex;gap:8px;padding:8px 16px;flex-wrap:wrap;justify-content:center;max-width:800px;margin-bottom:12px}
+.page-tab{padding:6px 16px;border-radius:20px;font-size:12px;color:var(--text3);background:var(--black-light);cursor:pointer;border:1px solid transparent;transition:all .2s;white-space:nowrap}
+.page-tab:hover{color:var(--gold-light);border-color:rgba(212,168,67,.2)}
+.page-tab.active{background:rgba(212,168,67,.12);color:var(--gold);border-color:rgba(212,168,67,.3);font-weight:600}
+.page-tab.admin{border-left:2px solid var(--blue)}
+
+/* Phone frame */
+.phone-wrap{position:relative;width:375px;height:740px;border-radius:44px;background:#000;box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 2px #333,inset 0 0 0 2px #222;overflow:hidden;margin-bottom:40px}
+.phone-notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:150px;height:28px;background:#000;border-radius:0 0 18px 18px;z-index:100}
+.phone-screen{width:100%;height:100%;overflow-y:auto;overflow-x:hidden;background:var(--black);scrollbar-width:none}
+.phone-screen::-webkit-scrollbar{display:none}
+
+/* Status bar */
+.status-bar{height:44px;background:var(--black-light);display:flex;align-items:flex-end;justify-content:space-between;padding:0 20px 6px;font-size:11px;color:#999;position:sticky;top:0;z-index:50}
+.status-bar .time{font-weight:600;color:#fff}
+
+/* Nav bar */
+.nav-bar{height:44px;background:var(--black-light);display:flex;align-items:center;padding:0 16px;border-bottom:1px solid rgba(212,168,67,.15);position:sticky;top:44px;z-index:49}
+.nav-bar .back{font-size:18px;color:#fff;padding:0 8px;cursor:pointer}
+.nav-bar .title{flex:1;text-align:center;font-size:16px;font-weight:600;color:#fff}
+.nav-bar .right{width:40px}
+
+/* Tab bar */
+.tab-bar{position:sticky;bottom:0;height:56px;background:var(--black-light);display:flex;border-top:1px solid rgba(255,255,255,.06);z-index:49}
+.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;color:var(--text3);cursor:pointer}
+.tab-item.active{color:var(--gold)}
+.tab-item .icon{font-size:20px}
+
+/* Page content area */
+.page{display:none;flex-direction:column;min-height:calc(100% - 44px - 44px)}
+.page.active{display:flex}
+.page.no-nav{min-height:calc(100% - 44px)}
+.page.no-tab{min-height:calc(100% - 44px - 44px)}
+
+/* Common components */
+.card{background:var(--black-card);border-radius:12px;padding:20px;margin:12px 16px;border:1px solid rgba(212,168,67,.08)}
+.card-hl{background:linear-gradient(145deg,#242424,#1A1A1A);border-radius:16px;padding:24px;margin:12px 16px;border:1px solid rgba(212,168,67,.2);box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.section-title{font-size:15px;font-weight:600;color:#fff;padding:16px 16px 8px;position:relative;padding-left:24px}
+.section-title::before{content:'';position:absolute;left:16px;top:20px;width:3px;height:14px;background:var(--gold);border-radius:2px}
+.gold{color:var(--gold)}.green{color:var(--green)}.red{color:var(--red)}.muted{color:var(--text3)}.sm{font-size:11px}.xs{font-size:10px}
+.num{font-family:'DIN Alternate','Avenir',sans-serif;font-weight:700}
+.btn{display:block;text-align:center;padding:12px;border-radius:24px;font-size:14px;font-weight:600;margin:12px 16px;cursor:pointer;border:none}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#000}
+.btn-outline{background:transparent;border:1.5px solid var(--gold);color:var(--gold)}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+
+/* ====== PAGE: Home ====== */
+.hero-card{margin:16px;border-radius:20px;padding:28px 24px;background:linear-gradient(145deg,#2A2A2A,#1A1A1A);border:1px solid rgba(212,168,67,.2);position:relative;overflow:hidden}
+.hero-card::after{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(212,168,67,.1),transparent);border-radius:50%}
+.level-badge{display:inline-block;padding:4px 14px;border-radius:14px;font-size:11px;font-weight:600;background:rgba(212,168,67,.12);color:var(--gold)}
+.hero-name{font-size:22px;font-weight:700;color:#fff;margin-top:8px}
+.hero-phone{font-size:12px;color:var(--text3);margin-top:2px}
+.hero-stats{display:flex;margin-top:20px;background:rgba(0,0,0,.3);border-radius:12px;padding:16px 0}
+.hero-stat{flex:1;text-align:center}
+.hero-stat .val{font-size:22px;font-weight:700;color:var(--gold);font-family:'DIN Alternate',sans-serif}
+.hero-stat .lbl{font-size:10px;color:#888;margin-top:2px}
+.hero-stat+.hero-stat{border-left:1px solid rgba(255,255,255,.06)}
+.action-grid{display:flex;flex-wrap:wrap;padding:4px 8px}
+.action-item{width:25%;text-align:center;padding:10px 0}
+.action-icon{width:48px;height:48px;margin:0 auto 6px;background:var(--black-card);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;border:1px solid rgba(212,168,67,.08)}
+.action-name{font-size:11px;color:var(--text2)}
+.activity-item{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.03)}
+.activity-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);margin-right:12px;flex-shrink:0}
+.activity-info{flex:1}.activity-desc{font-size:12px;color:#ddd}.activity-time{font-size:10px;color:var(--text3);margin-top:2px}
+.activity-pts{font-size:14px;font-weight:700;flex-shrink:0}
+
+/* ====== PAGE: Member Code ====== */
+.code-card{margin:24px 20px;background:linear-gradient(145deg,#242424,#1A1A1A);border-radius:20px;padding:32px 24px;text-align:center;border:1px solid rgba(212,168,67,.2)}
+.qr-box{width:180px;height:180px;margin:16px auto;background:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;position:relative}
+.qr-box canvas{width:160px;height:160px}
+.code-num{font-size:20px;font-weight:700;color:var(--gold);letter-spacing:3px;margin-top:12px;font-family:monospace}
+.code-hint{font-size:11px;color:#888;margin-top:4px}
+.refresh-btn{display:inline-block;margin:16px auto;padding:10px 28px;border:1px solid rgba(212,168,67,.3);border-radius:20px;color:var(--gold);font-size:13px;cursor:pointer}
+.tips{padding:16px 20px}.tips-title{font-size:13px;color:var(--text2);font-weight:600;margin-bottom:8px}.tips-item{font-size:11px;color:var(--text3);line-height:2}
+
+/* ====== PAGE: Recharge ====== */
+.balance-card{text-align:center;padding:24px}
+.balance-label{font-size:13px;color:var(--text2)}.balance-val{font-size:32px;font-weight:700;color:var(--gold);margin-top:4px}
+.pkg-grid{display:flex;flex-wrap:wrap;padding:0 12px;gap:10px}
+.pkg-item{width:calc(50% - 17px);background:var(--black-card);border-radius:12px;padding:18px 12px;text-align:center;border:2px solid transparent;position:relative;cursor:pointer}
+.pkg-item.selected{border-color:var(--gold);box-shadow:0 0 16px rgba(212,168,67,.15)}
+.pkg-tag{position:absolute;top:0;right:0;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#000;font-size:9px;padding:2px 8px;border-radius:0 10px 0 8px;font-weight:700}
+.pkg-amount{font-size:22px;font-weight:700;color:var(--gold)}.pkg-bonus{font-size:11px;color:var(--green);margin-top:4px}
+.custom-row{display:flex;align-items:center;padding:12px 0}.custom-prefix{font-size:22px;color:var(--gold);font-weight:700;margin-right:8px}
+.custom-input{flex:1;background:transparent;border:none;border-bottom:1px solid rgba(212,168,67,.2);font-size:18px;color:#fff;padding:8px 0;outline:none}
+.agree-row{display:flex;align-items:center;padding:12px 16px;gap:8px}
+.checkbox{width:18px;height:18px;border:1.5px solid #555;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--gold);border-color:var(--gold);background:rgba(212,168,67,.08)}
+.agree-text{font-size:11px;color:#999}
+.rules-card{margin:16px;padding:16px;background:var(--black-light);border-radius:10px}.rules-title{font-size:12px;color:var(--text2);font-weight:600;margin-bottom:6px}.rules-text{font-size:10px;color:var(--text3);line-height:2}
+
+/* ====== PAGE: Points ====== */
+.tabs{display:flex;gap:8px;padding:8px 16px;position:sticky;top:88px;background:var(--black);z-index:10}
+.tab{flex:1;text-align:center;padding:8px;font-size:12px;color:#888;border-radius:16px;background:var(--black-light);cursor:pointer}
+.tab.active{background:rgba(212,168,67,.15);color:var(--gold);font-weight:600}
+.flow-item{display:flex;align-items:center;padding:14px 16px;margin:0 16px 8px;background:var(--black-card);border-radius:10px;border:1px solid rgba(255,255,255,.03)}
+.flow-icon{font-size:20px;width:36px;text-align:center;flex-shrink:0}
+.flow-info{flex:1;margin-left:8px}.flow-desc{font-size:13px;color:#ddd}.flow-date{font-size:10px;color:var(--text3);margin-top:2px}
+.flow-pts{font-size:16px;font-weight:700;flex-shrink:0}
+
+/* ====== PAGE: Points Mall ====== */
+.mall-banner{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;margin:12px 16px;background:linear-gradient(145deg,#242424,#1A1A1A);border-radius:14px;border:1px solid rgba(212,168,67,.15)}
+.mall-grid{display:flex;flex-wrap:wrap;padding:4px 12px}
+.mall-item{width:calc(50% - 12px);margin:6px;background:var(--black-card);border-radius:12px;overflow:hidden}
+.mall-img{height:100px;display:flex;align-items:center;justify-content:center;font-size:36px}
+.mall-info{padding:10px 12px}.mall-name{font-size:12px;color:#ddd;margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mall-cost{font-size:11px;color:var(--gold);font-weight:600;margin-bottom:8px}
+.mall-btn{display:block;text-align:center;padding:6px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#000;font-size:11px;font-weight:600;border-radius:14px;border:none}
+
+/* ====== PAGE: Recommend ====== */
+.recommend-hero{text-align:center;padding:24px 16px 12px}
+.recommend-title{font-size:22px;font-weight:700;color:var(--gold)}
+.recommend-desc{font-size:12px;color:var(--text3);margin-top:4px}
+.code-display{text-align:center;padding:24px 20px;margin:12px 16px;background:linear-gradient(145deg,#242424,#1A1A1A);border-radius:16px;border:1px solid rgba(212,168,67,.2)}
+.code-label{font-size:11px;color:var(--text2)}.code-value{font-size:28px;font-weight:700;color:var(--gold);letter-spacing:4px;margin:8px 0;font-family:monospace}
+.copy-btn{display:inline-block;padding:6px 20px;border:1px dashed rgba(212,168,67,.4);border-radius:14px;color:var(--gold);font-size:12px;cursor:pointer}
+.rule-item{display:flex;align-items:flex-start;margin-bottom:10px}.rule-num{width:20px;height:20px;border-radius:50%;background:rgba(212,168,67,.12);color:var(--gold);font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-right:10px;margin-top:1px}
+.rule-text{font-size:11px;color:var(--text2);line-height:1.6}
+.stats-row{display:flex;padding:16px 0}.stat-col{flex:1;text-align:center}.stat-num{font-size:20px;font-weight:700;color:var(--gold);font-family:'DIN Alternate',sans-serif}.stat-lbl{font-size:10px;color:var(--text3);margin-top:2px}
+
+/* ====== PAGE: User/Profile ====== */
+.profile-header{text-align:center;padding:28px 16px 16px}
+.avatar-ring{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-dark));padding:2px;margin:0 auto 12px;display:inline-flex}
+.avatar-inner{width:100%;height:100%;border-radius:50%;background:var(--black-card);display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--gold)}
+.profile-name{font-size:18px;font-weight:700;color:#fff}
+.level-tag{display:inline-block;margin-top:4px;padding:2px 12px;border-radius:10px;font-size:11px;background:rgba(212,168,67,.1);color:var(--gold)}
+.profile-phone{font-size:11px;color:var(--text3);margin-top:4px}
+.menu-card{margin:8px 16px;background:var(--black-card);border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.03)}
+.menu-item{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.03)}
+.menu-item:last-child{border-bottom:none}
+.menu-left{display:flex;align-items:center;gap:10px}.menu-icon{font-size:18px}.menu-name{font-size:13px;color:#ddd}
+.menu-arrow{font-size:16px;color:#555}
+.admin-entry{margin:8px 16px;padding:14px 16px;background:var(--black-card);border-radius:12px;border:1px solid rgba(212,168,67,.2);display:flex;align-items:center;justify-content:space-between}
+.admin-text{font-size:14px;color:var(--gold);font-weight:600}
+
+/* ====== PAGE: Admin ====== */
+.admin-grid{display:flex;flex-wrap:wrap;padding:4px 8px}
+.admin-item{width:33.33%;text-align:center;padding:14px 0}.admin-icon{font-size:24px;display:block;margin-bottom:4px}.admin-name{font-size:11px;color:var(--text2)}
+.admin-stat-grid{display:flex;flex-wrap:wrap;padding:0 12px}
+.admin-stat{width:calc(50% - 12px);margin:6px;background:var(--black-card);border-radius:10px;padding:16px 12px;text-align:center;border:1px solid rgba(212,168,67,.06)}
+.admin-stat .val{font-size:20px;font-weight:700;color:var(--gold);font-family:'DIN Alternate',sans-serif}
+.admin-stat .lbl{font-size:10px;color:#888;margin-top:2px}
+
+/* ====== PAGE: Records ====== */
+.record-item{padding:14px 16px;margin:6px 16px;background:var(--black-card);border-radius:10px;border:1px solid rgba(255,255,255,.03)}
+.record-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.record-date{font-size:11px;color:var(--text3)}
+.record-bottom{display:flex;align-items:baseline;gap:10px}
+.record-amount{font-size:20px;font-weight:700;color:var(--gold)}
+.record-bonus{font-size:11px;color:var(--green)}
+
+/* ====== PAGE: Settings ====== */
+.setting-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.03)}
+.setting-row:last-child{border-bottom:none}
+.setting-label{font-size:13px;color:#ddd}
+.setting-val{font-size:13px;color:var(--gold);font-weight:600}
+.toggle{width:40px;height:22px;border-radius:11px;background:var(--gold);position:relative;cursor:pointer}
+.toggle::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:2px;right:2px}
+
+/* Footer */
+.footer{text-align:center;padding:24px;color:var(--text3);font-size:11px;max-width:600px}
+.footer a{color:var(--gold);text-decoration:none}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>尊享会员 · 小程序预览</h1>
+  <p>餐饮门店会员管理系统 · 高端商务风格 · 点击顶部标签切换页面</p>
+</div>
+
+<div class="page-tabs" id="pageTabs">
+  <div class="page-tab active" data-page="home">首页</div>
+  <div class="page-tab" data-page="membercode">会员码</div>
+  <div class="page-tab" data-page="recharge">储值充值</div>
+  <div class="page-tab" data-page="points">积分明细</div>
+  <div class="page-tab" data-page="mall">积分商城</div>
+  <div class="page-tab" data-page="recommend">推荐有礼</div>
+  <div class="page-tab" data-page="records">消费记录</div>
+  <div class="page-tab" data-page="profile">个人中心</div>
+  <div class="page-tab admin" data-page="admin">管理后台</div>
+  <div class="page-tab admin" data-page="settings">系统设置</div>
+</div>
+
+<div class="phone-wrap">
+  <div class="phone-notch"></div>
+  <div class="phone-screen" id="phoneScreen">
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span>📶 📡 🔋</span>
+    </div>
+
+    <!-- ===== HOME ===== -->
+    <div class="page active" id="page-home">
+      <div class="nav-bar"><span class="back"></span><span class="title">尊享会员</span><span class="right"></span></div>
+      <div class="hero-card">
+        <span class="level-badge">🥇 金卡会员</span>
+        <div class="hero-name">张明远</div>
+        <div class="hero-phone">138****6789</div>
+        <div class="hero-stats">
+          <div class="hero-stat"><div class="val num">1,280</div><div class="lbl">可用积分</div></div>
+          <div class="hero-stat"><div class="val num">¥2,650</div><div class="lbl">账户余额</div></div>
+        </div>
+      </div>
+      <div class="section-title">快捷操作</div>
+      <div class="action-grid">
+        <div class="action-item"><div class="action-icon">💰</div><div class="action-name">储值充值</div></div>
+        <div class="action-item"><div class="action-icon">⭐</div><div class="action-name">积分明细</div></div>
+        <div class="action-item"><div class="action-icon">🎁</div><div class="action-name">推荐有礼</div></div>
+        <div class="action-item"><div class="action-icon">🧾</div><div class="action-name">消费记录</div></div>
+      </div>
+      <div class="section-title">最近动态</div>
+      <div class="card" style="padding:0">
+        <div class="activity-item"><div class="activity-dot"></div><div class="activity-info"><div class="activity-desc">充值500元赠送10%积分</div><div class="activity-time">07-01 15:30</div></div><div class="activity-pts green">+50</div></div>
+        <div class="activity-item"><div class="activity-dot"></div><div class="activity-info"><div class="activity-desc">消费抵扣 — 招牌鱼头</div><div class="activity-time">06-30 19:20</div></div><div class="activity-pts red">-80</div></div>
+        <div class="activity-item"><div class="activity-dot"></div><div class="activity-info"><div class="activity-desc">推荐好友王小明充值奖励</div><div class="activity-time">06-28 12:15</div></div><div class="activity-pts green">+30</div></div>
+        <div class="activity-item" style="border:none"><div class="activity-dot"></div><div class="activity-info"><div class="activity-desc">推荐好友王小明消费奖励</div><div class="activity-time">06-27 20:00</div></div><div class="activity-pts green">+18</div></div>
+      </div>
+      <div style="height:20px"></div>
+      <div class="tab-bar">
+        <div class="tab-item active"><span class="icon">🏠</span>首页</div>
+        <div class="tab-item"><span class="icon">📱</span>会员码</div>
+        <div class="tab-item"><span class="icon">👤</span>我的</div>
+      </div>
+    </div>
+
+    <!-- ===== MEMBER CODE ===== -->
+    <div class="page" id="page-membercode">
+      <div class="nav-bar"><span class="back">◁</span><span class="title">会员码</span><span class="right"></span></div>
+      <div class="code-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <span class="gold" style="font-size:16px;font-weight:700">尊享会员</span>
+          <span class="badge" style="background:rgba(212,168,67,.1);color:var(--gold)">🥇 金卡会员</span>
+        </div>
+        <div class="qr-box"><canvas id="qrCanvas" width="160" height="160"></canvas></div>
+        <div class="code-num">VIP20260101001</div>
+        <div class="code-hint">请出示给收银员扫码</div>
+      </div>
+      <div style="text-align:center"><div class="refresh-btn">🔄 刷新二维码</div></div>
+      <div class="tips">
+        <div class="tips-title">使用说明</div>
+        <div class="tips-item">· 结账时出示会员码，享受会员权益</div>
+        <div class="tips-item">· 积分自动累积，可在积分商城兑换好礼</div>
+        <div class="tips-item">· 二维码每5分钟自动刷新</div>
+      </div>
+      <div class="tab-bar">
+        <div class="tab-item"><span class="icon">🏠</span>首页</div>
+        <div class="tab-item active"><span class="icon">📱</span>会员码</div>
+        <div class="tab-item"><span class="icon">👤</span>我的</div>
+      </div>
+    </div>
+
+    <!-- ===== RECHARGE ===== -->
+    <div class="page" id="page-recharge">
+      <div class="nav-bar"><span class="back">◁</span><span class="title">储值充值</span><span class="right"></span></div>
+      <div class="card-hl balance-card">
+        <div class="balance-label">当前余额</div>
+        <div class="balance-val num">¥2,650.00</div>
+      </div>
+      <div class="section-title">选择充值套餐</div>
+      <div class="pkg-grid">
+        <div class="pkg-item"><div class="pkg-amount num">¥100</div><div class="pkg-bonus">送10积分</div></div>
+        <div class="pkg-item"><div class="pkg-tag">推荐</div><div class="pkg-amount num">¥300</div><div class="pkg-bonus">送30积分</div></div>
+        <div class="pkg-item selected"><div class="pkg-tag" style="background:linear-gradient(135deg,#E74C3C,#C0392B)">热门</div><div class="pkg-amount num">¥500</div><div class="pkg-bonus">送50积分</div></div>
+        <div class="pkg-item"><div class="pkg-tag" style="background:linear-gradient(135deg,var(--blue),#2980B9)">超值</div><div class="pkg-amount num">¥1000</div><div class="pkg-bonus">送100积分</div></div>
+        <div class="pkg-item"><div class="pkg-tag" style="background:linear-gradient(135deg,#8E44AD,#6C3483)">尊享</div><div class="pkg-amount num">¥2000</div><div class="pkg-bonus">送200积分</div></div>
+        <div class="pkg-item"><div class="pkg-tag" style="background:linear-gradient(135deg,#1ABC9C,#16A085)">钻石</div><div class="pkg-amount num">¥5000</div><div class="pkg-bonus">送500积分</div></div>
+      </div>
+      <div class="section-title">自定义金额</div>
+      <div class="card" style="margin-top:4px"><div class="custom-row"><span class="custom-prefix">¥</span><input class="custom-input" value="500" readonly></div><div class="green sm" style="margin-top:8px">赠送 50 积分</div></div>
+      <div class="agree-row"><div class="checkbox">✓</div><span class="agree-text">我已阅读并同意《储值协议》</span></div>
+      <button class="btn btn-gold">立即充值 ¥500</button>
+      <div class="rules-card">
+        <div class="rules-title">充值规则</div>
+        <div class="rules-text">· 充值金额实时到账，赠送积分自动发放<br>· 赠送积分有效期365天，过期自动清零<br>· 积分仅限本店消费使用，不可提现或转让<br>· 充值金额最低10元起</div>
+      </div>
+      <div style="height:20px"></div>
+    </div>
+
+    <!-- ===== POINTS ===== -->
+    <div class="page" id="page-points">
+      <div class="nav-bar"><span class="back">◁</span><span class="title">积分明细</span><span class="right"></span></div>
+      <div class="card-hl" style="text-align:center;padding:20px">
+        <div class="sm muted">可用积分</div>
+        <div class="num gold" style="font-size:36px;margin-top:4px">1,280</div>
+      </div>
+      <div class="tabs">
+        <div class="tab active">全部</div>
+        <div class="tab">获得</div>
+        <div class="tab">消费</div>
+        <div class="tab">过期</div>
+      </div>
+      <div style="padding:8px 0">
+        <div class="flow-item"><div class="flow-icon">💰</div><div class="flow-info"><div class="flow-desc">充值赠送</div><div class="flow-date">07-01 15:30</div></div><div class="flow-pts green">+50</div></div>
+        <div class="flow-item"><div class="flow-icon">🛒</div><div class="flow-info"><div class="flow-desc">消费抵扣</div><div class="flow-date">06-30 19:20</div></div><div class="flow-pts red">-80</div></div>
+        <div class="flow-item"><div class="flow-icon">🎁</div><div class="flow-info"><div class="flow-desc">推荐充值奖励</div><div class="flow-date">06-28 12:15</div></div><div class="flow-pts green">+30</div></div>
+        <div class="flow-item"><div class="flow-icon">🎉</div><div class="flow-info"><div class="flow-desc">推荐消费奖励</div><div class="flow-date">06-27 20:00</div></div><div class="flow-pts green">+18</div></div>
+        <div class="flow-item"><div class="flow-icon">💰</div><div class="flow-info"><div class="flow-desc">充值赠送</div><div class="flow-date">06-25 10:45</div></div><div class="flow-pts green">+100</div></div>
+        <div class="flow-item"><div class="flow-icon">🛒</div><div class="flow-info"><div class="flow-desc">消费抵扣</div><div class="flow-date">06-22 18:30</div></div><div class="flow-pts red">-120</div></div>
+      </div>
+      <div style="text-align:center;padding:16px;font-size:11px;color:var(--text3)">— 没有更多了 —</div>
+    </div>
+
+    <!-- ===== MALL ===== -->
+    <div class="page" id="page-mall">
+      <div class="nav-bar"><span class="back">◁</span><span class="title">积分商城</span><span class="right"></span></div>
+      <div class="mall-banner"><span class="muted" style="font-size:13px">可用积分</span><span class="num gold" style="font-size:24px">1,280</span></div>
+      <div class="tabs" style="position:static">
+        <div class="tab active">全部</div>
+        <div class="tab">餐品</div>
+        <div class="tab">酒水</div>
+        <div class="tab">特惠</div>
+      </div>
+      <div class="mall-grid">
+        <div class="mall-item"><div class="mall-img" style="background:linear-gradient(135deg,#3D2B1F,#5C4033)">🍽️</div><div class="mall-info"><div class="mall-name">招牌鱼头兑换券</div><div class="mall-cost gold">200 积分</div><button class="mall-btn">兑换</button></div></div>
+        <div class="mall-item"><div class="mall-img" style="background:linear-gradient(135deg,#1B3A4B,#2E6B8A)">🍺</div><div class="mall-info"><div class="mall-name">精酿啤酒一杯</div><div class="mall-cost gold">150 积分</div><button class="mall-btn">兑换</button></div></div>
+        <div class="mall-item"><div class="mall-img" style="background:linear-gradient(135deg,#4A1942,#6B2D5B)">🎁</div><div class="mall-info"><div class="mall-name">甜品拼盘</div><div class="mall-cost gold">180 积分</div><button class="mall-btn">兑换</button></div></div>
+        <div class="mall-item"><div class="mall-img" style="background:linear-gradient(135deg,#3D2B1F,#5C4033)">🍽️</div><div class="mall-info"><div class="mall-name">双人套餐优惠券</div><div class="mall-cost gold">500 积分</div><button class="mall-btn">兑换</button></div></div>
+      </div>
+      <div style="text-align:center;padding:20px;font-size:10px;color:var(--text3)">积分仅限本店消费使用，不可提现、不转账、不兑换现金</div>
+    </div>
+
+    <!-- ===== RECOMMEND ===== -->
+    <div class="page" id="page-recommend">
+      <div class="nav-bar"><span class="back">◁</span><span class="title">推荐有礼</span><span class="right"></span></div>
+      <div class="recommend-hero">
+        <div class="recommend-title">推荐好友 共享权益</div>
+        <div class="recommend-desc">邀请好友注册，TA充值消费您都能获得积分奖励</div>
+      </div>
+      <div class="code-display">
+        <div class="code-label">我的推荐码</div>
+        <div class="code-value">REF001</div>
+        <div class="copy-btn">📋 复制推荐码</div>
+      </div>
+      <button class="btn btn-gold">分享给好友</button>
+      <div class="card" style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:13px;color:#ddd">👥 我的推荐</span>
+        <span class="muted sm">查看推荐列表 ›</span>
+      </div>
+      <div class="card">
+        <div class="gold" style="font-size:15px;font-weight:600;margin-bottom:14px">推荐规则</div>
+        <div class="rule-item"><div class="rule-num">1</div><div class="rule-text">好友通过您的推荐码注册即为推荐成功</div></div>
+        <div class="rule-item"><div class="rule-num">2</div><div class="rule-text">好友每次充值，您获得充值金额10%的积分奖励</div></div>
+        <div class="rule-item"><div class="rule-num">3</div><div class="rule-text">好友每次消费，您获得消费金额10%的积分奖励</div></div>
+        <div class="rule-item"><div class="rule-num">4</div><div class="rule-text">每月推荐奖励上限为5,000积分</div></div>
+        <div class="rule-item"><div class="rule-num">5</div><div class="rule-text">积分有效期365天，仅限本店消费使用</div></div>
+      </div>
+      <div class="card">
+        <div class="stats-row">
+          <div class="stat-col"><div class="stat-num num">5</div><div class="stat-lbl">推荐人数</div></div>
+          <div class="stat-col"><div class="stat-num num">1,500</div><div class="stat-lbl">累计奖励</div></div>
+          <div class="stat-col"><div class="stat-num num">300</div><div class="stat-lbl">本月奖励</div></div>
+        </div>
+      </div>
+      <div style="height:20px"></div>
+    </div>
+
+    <!-- ===== RECORDS ===== -->
+    <div class="page" id="page-records">
+      <div class="nav-bar"><span class="back">◁</span><span class="title">消费记录</span><span class="right"></span></div>
+      <div class="card-hl" style="display:flex;justify-content:space-between;align-items:center;padding:16px 20px">
+        <span class="muted" style="font-size:13px">本月消费</span>
+        <span class="num gold" style="font-size:24px">¥1,280.00</span>
+      </div>
+      <div class="record-item"><div class="record-top"><span class="record-date">07-01 19:30</span><span class="record-amount num">¥380.00</span></div><div class="record-bottom"><span class="badge" style="background:rgba(231,76,60,.1);color:var(--red)">-50积分抵扣</span><span class="muted xs">实付 ¥330.00</span></div><div class="muted xs" style="margin-top:6px">招牌鱼头 · 精酿啤酒x2 · 时蔬拼盘</div></div>
+      <div class="record-item"><div class="record-top"><span class="record-date">06-28 12:15</span><span class="record-amount num">¥260.00</span></div><div class="record-bottom"><span class="badge" style="background:rgba(231,76,60,.1);color:var(--red)">-30积分抵扣</span><span class="muted xs">实付 ¥230.00</span></div><div class="muted xs" style="margin-top:6px">商务套餐A · 鲜榨果汁</div></div>
+      <div class="record-item"><div class="record-top"><span class="record-date">06-25 20:00</span><span class="record-amount num">¥520.00</span></div><div class="record-bottom"><span class="muted xs">实付 ¥520.00</span></div><div class="muted xs" style="margin-top:6px">四人聚餐套餐 · 红酒一瓶</div></div>
+      <div class="record-item"><div class="record-top"><span class="record-date">06-20 18:45</span><span class="record-amount num">¥120.00</span></div><div class="record-bottom"><span class="muted xs">实付 ¥120.00</span></div><div class="muted xs" style="margin-top:6px">双人午餐套餐</div></div>
+      <div style="text-align:center;padding:16px;font-size:11px;color:var(--text3)">— 没有更多了 —</div>
+    </div>
+
+    <!-- ===== PROFILE ===== -->
+    <div class="page" id="page-profile">
+      <div class="nav-bar"><span class="back"></span><span class="title">个人中心</span><span class="right"></span></div>
+      <div class="profile-header">
+        <div class="avatar-ring"><div class="avatar-inner">张</div></div>
+        <div class="profile-name">张明远</div>
+        <div class="level-tag">🥇 金卡会员</div>
+        <div class="profile-phone">138****6789</div>
+      </div>
+      <div class="card" style="display:flex;padding:16px 0">
+        <div class="stat-col"><div class="stat-num num gold">8,500</div><div class="stat-lbl muted">累计充值</div></div>
+        <div class="stat-col"><div class="stat-num num gold">1,280</div><div class="stat-lbl muted">当前积分</div></div>
+        <div class="stat-col"><div class="stat-num num gold">5</div><div class="stat-lbl muted">推荐人数</div></div>
+      </div>
+      <div class="admin-entry"><div style="display:flex;align-items:center;gap:10px"><span style="font-size:18px">⚙️</span><span class="admin-text">管理后台</span></div><span class="gold" style="font-size:18px">›</span></div>
+      <div style="padding:8px 16px;font-size:11px;color:#888">交易记录</div>
+      <div class="menu-card">
+        <div class="menu-item"><div class="menu-left"><span class="menu-icon">💰</span><span class="menu-name">我的充值</span></div><span class="menu-arrow">›</span></div>
+        <div class="menu-item"><div class="menu-left"><span class="menu-icon">🧾</span><span class="menu-name">消费记录</span></div><span class="menu-arrow">›</span></div>
+        <div class="menu-item"><div class="menu-left"><span class="menu-icon">⭐</span><span class="menu-name">积分明细</span></div><span class="menu-arrow">›</span></div>
+        <div class="menu-item"><div class="menu-left"><span class="menu-icon">🛍️</span><span class="menu-name">积分商城</span></div><span class="menu-arrow">›</span></div>
+      </div>
+      <div style="padding:8px 16px;font-size:11px;color:#888">推荐中心</div>
+      <div class="menu-card">
+        <div class="menu-item"><div class="menu-left"><span class="menu-icon">🎁</span><span class="menu-name">推荐有礼</span></div><span class="menu-arrow">›</span></div>
+        <div class="menu-item"><div class="menu-left"><span class="menu-icon">👥</span><span class="menu-name">我的推荐</span></div><span class="menu-arrow">›</span></div>
+      </div>
+      <div style="padding:8px 16px;font-size:11px;color:#888">更多</div>
+      <div class="menu-card">
+        <div class="menu-item"><div class="menu-left"><span class="menu-icon">📞</span><span class="menu-name">联系客服</span></div><span class="menu-arrow">›</span></div>
+        <div class="menu-item"><div class="menu-left"><span class="menu-icon">ℹ️</span><span class="menu-name">关于我们</span></div><span class="menu-arrow">›</span></div>
+      </div>
+      <button class="btn btn-outline" style="margin-top:20px">退出登录</button>
+      <div style="height:20px"></div>
+      <div class="tab-bar">
+        <div class="tab-item"><span class="icon">🏠</span>首页</div>
+        <div class="tab-item"><span class="icon">📱</span>会员码</div>
+        <div class="tab-item active"><span class="icon">👤</span>我的</div>
+      </div>
+    </div>
+
+    <!-- ===== ADMIN ===== -->
+    <div class="page" id="page-admin">
+      <div class="nav-bar"><span class="back">◁</span><span class="title">管理后台</span><span class="right"></span></div>
+      <div class="section-title">今日概览</div>
+      <div class="admin-stat-grid">
+        <div class="admin-stat"><div class="val">5</div><div class="lbl">新增会员</div></div>
+        <div class="admin-stat"><div class="val">¥12,000</div><div class="lbl">充值金额</div></div>
+        <div class="admin-stat"><div class="val">¥8,500</div><div class="lbl">消费金额</div></div>
+        <div class="admin-stat"><div class="val">2,000</div><div class="lbl">发放积分</div></div>
+      </div>
+      <div class="section-title">累计数据</div>
+      <div class="card" style="display:flex;padding:16px 0">
+        <div class="stat-col"><div class="stat-num num gold">1,500</div><div class="stat-lbl muted">总会员</div></div>
+        <div class="stat-col"><div class="stat-num num gold">85万</div><div class="stat-lbl muted">总充值</div></div>
+        <div class="stat-col"><div class="stat-num num gold">62万</div><div class="stat-lbl muted">总消费</div></div>
+        <div class="stat-col"><div class="stat-num num gold">15万</div><div class="stat-lbl muted">总积分</div></div>
+      </div>
+      <div class="section-title">功能模块</div>
+      <div class="admin-grid">
+        <div class="admin-item"><span class="admin-icon">👥</span><span class="admin-name">会员管理</span></div>
+        <div class="admin-item"><span class="admin-icon">🔗</span><span class="admin-name">推荐关系</span></div>
+        <div class="admin-item"><span class="admin-icon">💰</span><span class="admin-name">充值记录</span></div>
+        <div class="admin-item"><span class="admin-icon">🧾</span><span class="admin-name">消费记录</span></div>
+        <div class="admin-item"><span class="admin-icon">⭐</span><span class="admin-name">积分流水</span></div>
+        <div class="admin-item"><span class="admin-icon">✅</span><span class="admin-name">积分核销</span></div>
+        <div class="admin-item"><span class="admin-icon">⚙️</span><span class="admin-name">系统设置</span></div>
+      </div>
+      <button class="btn btn-outline">导出数据</button>
+      <div style="height:20px"></div>
+    </div>
+
+    <!-- ===== SETTINGS ===== -->
+    <div class="page" id="page-settings">
+      <div class="nav-bar"><span class="back">◁</span><span class="title">系统设置</span><span class="right"></span></div>
+      <div class="section-title">积分规则</div>
+      <div class="card">
+        <div class="setting-row"><span class="setting-label">充值赠送比例</span><span class="setting-val">10%</span></div>
+        <div class="setting-row"><span class="setting-label">推荐充值奖励比例</span><span class="setting-val">10%</span></div>
+        <div class="setting-row"><span class="setting-label">推荐消费奖励比例</span><span class="setting-val">10%</span></div>
+        <div class="setting-row"><span class="setting-label">积分抵扣比率</span><span class="setting-val">1积分 = 1元</span></div>
+      </div>
+      <div class="section-title">风控设置</div>
+      <div class="card">
+        <div class="setting-row"><span class="setting-label">每月推荐奖励上限</span><span class="setting-val">5,000 积分</span></div>
+        <div class="setting-row"><span class="setting-label">积分有效期</span><span class="setting-val">365 天</span></div>
+        <div class="setting-row"><span class="setting-label">退款扣回积分</span><div class="toggle"></div></div>
+      </div>
+      <div class="section-title">商品设置</div>
+      <div class="card">
+        <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:8px">
+          <span class="setting-label">不参与积分的商品</span>
+          <div style="font-size:12px;color:var(--text2);background:var(--black-light);padding:10px 14px;border-radius:8px;width:100%;border:1px solid rgba(212,168,67,.1)">特价菜A, 套餐B</div>
+        </div>
+      </div>
+      <button class="btn btn-gold">保存设置</button>
+      <button class="btn btn-outline">恢复默认</button>
+      <div style="height:20px"></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer">
+  <p>餐饮门店会员小程序 · 原生微信小程序 · 高端商务金黑主题</p>
+  <p style="margin-top:8px">
+    <a href="https://github.com/guizhoujieyouxinxikeji-bit/huiyuan">GitHub 仓库</a> ·
+    <a href="./index.html">API 接口文档</a> ·
+    <a href="./preview.html">小程序预览</a>
+  </p>
+  <p style="margin-top:8px">充值赠送10%积分 · 一级推荐奖励10% · 月上限5000积分 · 365天有效期</p>
+</div>
+
+<script>
+// Page switching
+const tabs = document.querySelectorAll('.page-tab');
+const pages = document.querySelectorAll('.page');
+const screen = document.getElementById('phoneScreen');
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    const target = tab.dataset.page;
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    pages.forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + target).classList.add('active');
+    screen.scrollTop = 0;
+  });
+});
+
+// Draw QR code on canvas
+function drawQR() {
+  const canvas = document.getElementById('qrCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fillRect(0, 0, 160, 160);
+  const cellSize = 4;
+  const grid = 32;
+  ctx.fillStyle = '#1A1A1A';
+  // Finder patterns
+  function drawFinder(x, y) {
+    for (let r = 0; r < 7; r++) for (let c = 0; c < 7; c++) {
+      const outer = r === 0 || r === 6 || c === 0 || c === 6;
+      const inner = r >= 2 && r <= 4 && c >= 2 && c <= 4;
+      if (outer || inner) ctx.fillRect((x + c) * cellSize, (y + r) * cellSize, cellSize, cellSize);
+    }
+  }
+  drawFinder(1, 1); drawFinder(24, 1); drawFinder(1, 24);
+  // Random data
+  let seed = 42;
+  for (let r = 0; r < grid; r++) for (let c = 0; c < grid; c++) {
+    const inFinder = (r < 9 && c < 9) || (r < 9 && c > 22) || (r > 22 && c < 9);
+    if (inFinder) continue;
+    seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+    if (seed % 3 !== 0) ctx.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
+  }
+  // Center logo
+  ctx.fillStyle = '#D4A843';
+  ctx.beginPath();
+  ctx.arc(80, 80, 12, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 10px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('VIP', 80, 80);
+}
+drawQR();
+</script>
+</body>
+</html>
