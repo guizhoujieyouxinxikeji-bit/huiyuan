@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>餐饮门店会员小程序 — API 接口文档</title>
+<style>
+  :root {
+    --gold: #D4A843; --gold-light: #E8C97A; --gold-dark: #B8912E;
+    --black: #0D0D0D; --black-light: #1A1A1A; --black-card: #242424;
+    --text: #E0E0E0; --text-muted: #999; --text-dim: #666;
+    --border: rgba(212,168,67,0.15); --code-bg: #1E1E1E;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--black); color: var(--text); line-height: 1.7; }
+
+  /* Layout */
+  .layout { display: flex; min-height: 100vh; }
+  .sidebar { width: 280px; background: var(--black-light); border-right: 1px solid var(--border); position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto; padding: 24px 0; z-index: 10; }
+  .main { margin-left: 280px; flex: 1; max-width: 900px; padding: 48px 56px 80px; }
+
+  /* Sidebar */
+  .sidebar-header { padding: 0 24px 24px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+  .sidebar-header h1 { font-size: 18px; color: var(--gold); font-weight: 700; }
+  .sidebar-header .version { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .sidebar-header .subtitle { font-size: 13px; color: var(--text-dim); margin-top: 8px; }
+  .nav-group { padding: 8px 0; }
+  .nav-group-title { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; padding: 8px 24px 4px; font-weight: 600; }
+  .nav-item { display: block; padding: 7px 24px 7px 32px; font-size: 13px; color: var(--text-muted); text-decoration: none; transition: all 0.2s; border-left: 3px solid transparent; }
+  .nav-item:hover { color: var(--gold-light); background: rgba(212,168,67,0.05); }
+  .nav-item.active { color: var(--gold); border-left-color: var(--gold); background: rgba(212,168,67,0.08); }
+  .nav-item .method { display: inline-block; width: 36px; font-size: 10px; font-weight: 700; margin-right: 6px; }
+  .nav-item .method.get { color: #2ECC71; }
+  .nav-item .method.post { color: #3498DB; }
+  .nav-item .method.put { color: #F39C12; }
+  .nav-item .method.del { color: #E74C3C; }
+
+  /* Content */
+  .main h1 { font-size: 32px; color: var(--gold); font-weight: 700; margin-bottom: 8px; }
+  .main h2 { font-size: 24px; color: var(--gold-light); font-weight: 600; margin: 48px 0 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); scroll-margin-top: 24px; }
+  .main h3 { font-size: 18px; color: var(--text); font-weight: 600; margin: 32px 0 12px; scroll-margin-top: 24px; }
+  .main h4 { font-size: 15px; color: var(--gold); margin: 20px 0 8px; }
+  .main p { margin: 8px 0; color: var(--text); font-size: 14px; }
+  .main a { color: var(--gold); text-decoration: none; }
+  .main a:hover { text-decoration: underline; }
+  .main ul, .main ol { padding-left: 24px; margin: 8px 0; }
+  .main li { margin: 4px 0; font-size: 14px; }
+  .main blockquote { border-left: 3px solid var(--gold); padding: 8px 16px; margin: 12px 0; background: rgba(212,168,67,0.05); color: var(--text-muted); font-size: 13px; border-radius: 0 8px 8px 0; }
+  .main hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+  .main strong { color: #fff; }
+
+  /* Code */
+  .main code { font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; font-size: 13px; background: var(--code-bg); padding: 2px 6px; border-radius: 4px; color: var(--gold-light); border: 1px solid rgba(255,255,255,0.06); }
+  .main pre { background: var(--code-bg); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 16px 20px; margin: 12px 0; overflow-x: auto; }
+  .main pre code { background: none; padding: 0; border: none; color: var(--text); font-size: 13px; line-height: 1.6; }
+
+  /* Tables */
+  .main table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+  .main th { background: var(--black-card); color: var(--gold); text-align: left; padding: 10px 14px; border: 1px solid var(--border); font-weight: 600; }
+  .main td { padding: 8px 14px; border: 1px solid rgba(255,255,255,0.06); color: var(--text); }
+  .main tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  /* API endpoint card */
+  .endpoint-card { background: var(--black-card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin: 16px 0 24px; }
+  .endpoint-card .endpoint-url { font-family: 'SF Mono', monospace; font-size: 15px; color: var(--gold); margin-bottom: 8px; word-break: break-all; }
+  .endpoint-card .endpoint-method { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 12px; font-weight: 700; margin-right: 8px; }
+  .endpoint-card .endpoint-method.get { background: rgba(46,204,113,0.15); color: #2ECC71; }
+  .endpoint-card .endpoint-method.post { background: rgba(52,152,219,0.15); color: #3498DB; }
+  .endpoint-card .endpoint-method.put { background: rgba(243,156,18,0.15); color: #F39C12; }
+
+  /* Badge */
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+  .badge-required { background: rgba(231,76,60,0.15); color: #E74C3C; }
+  .badge-optional { background: rgba(255,255,255,0.08); color: var(--text-muted); }
+
+  /* Hero */
+  .hero { padding: 48px 0 32px; border-bottom: 1px solid var(--border); margin-bottom: 32px; }
+  .hero h1 { font-size: 36px; background: linear-gradient(135deg, var(--gold), var(--gold-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero .meta { display: flex; gap: 24px; margin-top: 12px; }
+  .hero .meta-item { font-size: 13px; color: var(--text-muted); }
+  .hero .meta-item span { color: var(--gold); font-weight: 600; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(212,168,67,0.3); border-radius: 3px; }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; padding: 24px 20px; }
+    .hero h1 { font-size: 24px; }
+  }
+
+  /* Loading */
+  #loading { display: flex; align-items: center; justify-content: center; height: 100vh; color: var(--gold); font-size: 16px; }
+  #loading .spinner { width: 24px; height: 24px; border: 3px solid rgba(212,168,67,0.2); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 12px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h1>🍽️ 尊享会员</h1>
+      <div class="version">API v1.0</div>
+      <div class="subtitle">餐饮门店会员小程序接口文档</div>
+    </div>
+    <nav id="nav"></nav>
+  </aside>
+  <main class="main" id="content">
+    <div id="loading"><div class="spinner"></div>加载文档中...</div>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.1/marked.min.js"></script>
+<script>
+// Configure marked
+marked.setOptions({
+  breaks: true,
+  gfm: true,
+  headerIds: true
+});
+
+// Custom renderer
+const renderer = new marked.Renderer();
+renderer.heading = function(text, level) {
+  const id = text.toLowerCase().replace(/<[^>]*>/g, '').replace(/[^\w\u4e00-\u9fff]+/g, '-').replace(/^-|-$/g, '');
+  return '<h' + level + ' id="' + id + '">' + text + '</h' + level + '>';
+};
+
+// Nav structure
+const navConfig = [
+  { title: '概览', items: [
+    { label: '概述', id: '1-概述' },
+    { label: '风控规则', id: '9-风控规则说明' },
+    { label: '数据库设计', id: '10-数据库参考设计' }
+  ]},
+  { title: '接口模块', items: [
+    { label: '认证模块', id: '2-认证模块-auth', prefix: '/auth' },
+    { label: '会员模块', id: '3-会员模块-member', prefix: '/member' },
+    { label: '充值模块', id: '4-充值模块-recharge', prefix: '/recharge' },
+    { label: '积分模块', id: '5-积分模块-points', prefix: '/points' },
+    { label: '推荐模块', id: '6-推荐模块-referral', prefix: '/referral' },
+    { label: '消费模块', id: '7-消费模块-consume', prefix: '/consume' },
+    { label: '管理后台', id: '8-管理后台模块-admin', prefix: '/admin' }
+  ]},
+  { title: '接口详情', items: [
+    { label: '微信登录', method: 'POST', id: '21-微信登录' },
+    { label: '获取用户信息', method: 'GET', id: '22-获取用户信息' },
+    { label: '获取会员信息', method: 'GET', id: '31-获取会员信息' },
+    { label: '获取会员码', method: 'GET', id: '32-获取会员码' },
+    { label: '获取充值套餐', method: 'GET', id: '41-获取充值套餐' },
+    { label: '创建充值订单', method: 'POST', id: '42-创建充值订单' },
+    { label: '获取充值记录', method: 'GET', id: '43-获取充值记录' },
+    { label: '获取积分余额', method: 'GET', id: '51-获取积分余额' },
+    { label: '获取积分流水', method: 'GET', id: '52-获取积分流水' },
+    { label: '积分抵扣消费', method: 'POST', id: '53-积分抵扣消费' },
+    { label: '获取商城商品', method: 'GET', id: '54-获取积分商城商品' },
+    { label: '兑换商城商品', method: 'POST', id: '55-兑换商城商品' },
+    { label: '获取推荐码', method: 'GET', id: '61-获取我的推荐码' },
+    { label: '获取推荐列表', method: 'GET', id: '62-获取推荐列表' },
+    { label: '绑定推荐关系', method: 'POST', id: '63-绑定推荐关系' },
+    { label: '获取消费记录', method: 'GET', id: '71-获取消费记录' },
+    { label: '创建消费订单', method: 'POST', id: '72-创建消费订单' },
+    { label: '看板数据', method: 'GET', id: '81-获取看板数据' },
+    { label: '会员列表', method: 'GET', id: '82-获取会员列表' },
+    { label: '推荐关系列表', method: 'GET', id: '83-获取推荐关系列表' },
+    { label: '系统设置', method: 'GET', id: '89-获取系统设置' },
+    { label: '导出数据', method: 'GET', id: '811-导出数据' }
+  ]}
+];
+
+// Build nav
+function buildNav() {
+  const nav = document.getElementById('nav');
+  let html = '';
+  navConfig.forEach(group => {
+    html += '<div class="nav-group"><div class="nav-group-title">' + group.title + '</div>';
+    group.items.forEach(item => {
+      const methodHtml = item.method ? '<span class="method ' + item.method.toLowerCase() + '">' + item.method + '</span>' : '';
+      html += '<a class="nav-item" href="#' + item.id + '">' + methodHtml + item.label + '</a>';
+    });
+    html += '</div>';
+  });
+  nav.innerHTML = html;
+}
+
+// Smooth scroll & active state
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('nav-item')) {
+    e.preventDefault();
+    const id = e.target.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    e.target.classList.add('active');
+  }
+});
+
+// Intersection observer for active nav
+function setupScrollSpy() {
+  const headings = document.querySelectorAll('.main h2, .main h3');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        document.querySelectorAll('.nav-item').forEach(n => {
+          n.classList.toggle('active', n.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  headings.forEach(h => observer.observe(h));
+}
+
+// Load and render markdown
+async function loadDoc() {
+  try {
+    const resp = await fetch('./API.md');
+    if (!resp.ok) throw new Error('Failed to load');
+    const md = await resp.text();
+    const html = marked.parse(md, { renderer });
+
+    document.getElementById('content').innerHTML =
+      '<div class="hero">' +
+        '<h1>餐饮门店会员小程序</h1>' +
+        '<p style="color:var(--text-muted);margin-top:8px;font-size:15px;">后端 API 接口文档 · 原生微信小程序 · 高端商务风格</p>' +
+        '<div class="meta">' +
+          '<div class="meta-item">版本 <span>v1.0</span></div>' +
+          '<div class="meta-item">协议 <span>HTTPS</span></div>' +
+          '<div class="meta-item">格式 <span>JSON</span></div>' +
+          '<div class="meta-item">鉴权 <span>Bearer JWT</span></div>' +
+          '<div class="meta-item">接口数 <span>20+</span></div>' +
+        '</div>' +
+      '</div>' +
+      html;
+
+    buildNav();
+    setupScrollSpy();
+
+    // Style all tables
+    document.querySelectorAll('table').forEach(table => {
+      if (!table.closest('pre')) {
+        table.classList.add('styled');
+      }
+    });
+  } catch (e) {
+    document.getElementById('content').innerHTML =
+      '<div class="hero"><h1>API 文档加载失败</h1><p style="color:var(--text-muted)">请确保 API.md 文件存在于同一目录下</p></div>';
+  }
+}
+
+loadDoc();
+</script>
+</body>
+</html>
